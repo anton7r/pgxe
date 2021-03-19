@@ -2,7 +2,6 @@
 
 [![](https://godoc.org/github.com/anton7r/pgxe?status.svg)](https://pkg.go.dev/github.com/anton7r/pgxe)
 ![Coverage](./coverage_badge.png)
-[![codecov](https://codecov.io/gh/anton7r/pgxe/branch/main/graph/badge.svg?token=N2WS438HCH)](https://codecov.io/gh/anton7r/pgxe)
 
 Extends from the jackc/pgx library.
 
