@@ -8,10 +8,14 @@ Utilizes the pgx library under the hood to achieve fast performance.
 
 It also uses a modified fork of scany (`github.com/anton7r/pgx-scany` which removes unneccessary imports) to scan database rows into structs.
 
+## Installation
+
+`go get -u github.com/anton7r/pgxe`
+
 ## Features
 
 - Simplified SQLX like API
-- Named Queries Supported
+- Named Queries Supported and they are fast
 
 ## Code example
 
