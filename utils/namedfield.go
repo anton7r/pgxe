@@ -37,7 +37,7 @@ func GetNamedField(ifc interface{}, name string) (string, error) {
 }
 
 func convertValueString(ifc interface{}) (string, error) {
-	switch ifc.(type) {
+	switch t := ifc.(type) {
 	case string:
 		return escape.QuoteString(ifc.(string)), nil
 	case bool:
@@ -46,31 +46,31 @@ func convertValueString(ifc interface{}) (string, error) {
 		}
 		return "FALSE", nil
 	case int:
-		return strconv.Itoa(ifc.(int)), nil
+		return strconv.Itoa(t), nil
 	case int8:
-		return strconv.Itoa(int(ifc.(int8))), nil
+		return strconv.Itoa(int(t)), nil
 	case int16:
-		return strconv.Itoa(int(ifc.(int16))), nil
+		return strconv.Itoa(int(t)), nil
 	case int32:
-		return strconv.Itoa(int(ifc.(int32))), nil
+		return strconv.Itoa(int(t)), nil
 	case int64:
-		return strconv.FormatInt(ifc.(int64), 10), nil
+		return strconv.FormatInt(t, 10), nil
 
 	case float32:
-		return fmt.Sprintf("%f", ifc.(float32)), nil
+		return fmt.Sprintf("%f", t), nil
 	case float64:
-		return fmt.Sprintf("%f", ifc.(float64)), nil
+		return fmt.Sprintf("%f", t), nil
 
 	case uint:
-		return strconv.Itoa(int(ifc.(uint))), nil
+		return strconv.Itoa(int(t)), nil
 	case uint8:
-		return strconv.Itoa(int(ifc.(uint8))), nil
+		return strconv.Itoa(int(t)), nil
 	case uint16:
-		return strconv.Itoa(int(ifc.(uint16))), nil
+		return strconv.Itoa(int(t)), nil
 	case uint32:
-		return strconv.Itoa(int(ifc.(uint32))), nil
+		return strconv.Itoa(int(t)), nil
 	case uint64:
-		return strconv.FormatUint(ifc.(uint64), 10), nil
+		return strconv.FormatUint(t, 10), nil
 	}
 
 	return "", errors.New("unsupported type")

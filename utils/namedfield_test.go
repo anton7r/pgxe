@@ -33,7 +33,7 @@ func TestMissingField(t *testing.T) {
 	_, err := utils.GetNamedField(&testStruct{Field2: 123}, "Field22")
 
 	if err != nil {
-		if err.Error() != "field 'field22' not found" {
+		if err.Error() != "field 'Field22' not found" {
 			t.Error("Function errored:" + err.Error())
 		}
 	}
