@@ -24,6 +24,10 @@ type testStruct struct {
 	FieldUnsupported2 []int
 }
 
+type testStruct2 struct {
+	Field string
+}
+
 func TestMissingField(t *testing.T) {
 
 	_, err := utils.GetNamedField(&testStruct{Field2: 123}, "Field22")
@@ -249,5 +253,27 @@ func TestUnsupportedType2(t *testing.T) {
 	if err == nil {
 		t.Error("pointer was not errored")
 		return
+	}
+}
+
+func BenchmarkGetNamedField(b *testing.B) {
+	ts := &testStruct{Field:"Field"}
+
+	for i := 0; i < b.N; i++ {
+		_, err := utils.GetNamedField(ts, "Field")
+		if err != nil {
+			b.Error(err.Error())
+		}
+	}
+}
+
+func BenchmarkGetNamedField2(b *testing.B) {
+	ts := &testStruct2{Field:"Field"}
+
+	for i := 0; i < b.N; i++ {
+		_, err := utils.GetNamedField(ts, "Field")
+		if err != nil {
+			b.Error(err.Error())
+		}
 	}
 }

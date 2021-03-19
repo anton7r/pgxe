@@ -10,7 +10,7 @@ type TestStruct struct {
 	Email string
 }
 
-func TestParse(t *testing.T) {
+func TestCompile(t *testing.T) {
 	str, err := lexer.Compile("SELECT * FROM users WHERE name = :name AND email = :email", &TestStruct{Name: "Foo", Email: "foo@barbar"})
 	if err != nil {
 		t.Error("Failed: ", err.Error())
@@ -23,16 +23,7 @@ func TestParse(t *testing.T) {
 	}
 }
 
-func TestRune(t *testing.T) {
-	if 'a' > '9' {
-
-	} else {
-		t.Error("Fail")
-	}
-
-}
-
-func BenchmarkParse(b *testing.B) {
+func BenchmarkCompile(b *testing.B) {
 	ts := &TestStruct{Name: "Foo", Email: "foo@barbar"}
 	for i := 0; i < b.N; i++ {
 		lexer.Compile("SELECT * FROM users WHERE name = :name AND email = :email", ts)

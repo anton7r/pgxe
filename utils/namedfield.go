@@ -13,8 +13,7 @@ import (
 //gets the field from structs and interfaces
 //the interface parameter must be a pointer
 func GetNamedField(ifc interface{}, name string) (string, error) {
-	name = strings.ToLower(name)
-	
+
 	//TODO: move these two lines to an method above the method tree since these are
 	rv := reflect.ValueOf(ifc)
 	e := rv.Elem()
@@ -23,7 +22,7 @@ func GetNamedField(ifc interface{}, name string) (string, error) {
 	if kind == reflect.Struct {
 
 		value := e.FieldByNameFunc(func(fieldName string) bool {
-			return strings.ToLower(fieldName) == name
+			return strings.EqualFold(fieldName, name)
 		})
 
 		if value.IsValid() {
