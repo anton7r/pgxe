@@ -1,5 +1,6 @@
 # PGXE - PGX Extension
 
+[![](https://godoc.org/github.com/anton7r/pgxe?status.svg)](https://pkg.go.dev/github.com/anton7r/pgxe)
 ![Coverage](./coverage_badge.png)
 
 Extends from the jackc/pgx library.
