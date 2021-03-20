@@ -6,17 +6,20 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
 	"github.com/anton7r/pgxe/escape"
 )
+
+func PrepReflect(ifc interface{}) reflect.Value {
+	//TODO: move these two lines to an method above the method tree since these are
+	rv := reflect.ValueOf(ifc)
+	return rv.Elem()
+}
 
 //TODO: add more support
 //gets the field from structs and interfaces
 //the interface parameter must be a pointer
-func GetNamedField(ifc interface{}, name string) (string, error) {
-
-	//TODO: move these two lines to an method above the method tree since these are
-	rv := reflect.ValueOf(ifc)
-	e := rv.Elem()
+func GetNamedField(e reflect.Value, name string) (string, error) {
 	kind := e.Kind()
 
 	if kind == reflect.Struct {
@@ -41,7 +44,7 @@ func convertValueString(ifc interface{}) (string, error) {
 	case string:
 		return escape.QuoteString(ifc.(string)), nil
 	case bool:
-		if ifc.(bool) {
+		if t {
 			return "TRUE", nil
 		}
 		return "FALSE", nil

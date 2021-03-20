@@ -3,26 +3,26 @@ package lexer
 
 import (
 	"bytes"
-	"github.com/anton7r/pgxe/utils"
+	"reflect"
 	"unicode/utf8"
+
+	"github.com/anton7r/pgxe/utils"
 )
 
-func appendPart(b *bytes.Buffer, str string, isParameter bool, arg interface{}) error {
-	if !isParameter {
-		_, err := b.WriteString(str)
+func appendPart(b *bytes.Buffer, str string, isParameter bool, arg reflect.Value) error {
+	if isParameter {
+		var err error
+		str, err = utils.GetNamedField(arg, str)
 		if err != nil {
 			return err
-		}
-	} else {
-		str, err := utils.GetNamedField(arg, str)
-		if err != nil {
-			return err
-		}
-		_, err2 := b.WriteString(str)
-		if err2 != nil {
-			return err2
 		}
 	}
+
+	_, err2 := b.WriteString(str)
+	if err2 != nil {
+		return err2
+	}
+
 	return nil
 }
 
@@ -35,18 +35,20 @@ func Compile(sql string, arg interface{}) (string, error) {
 	pos := 0
 	onParameter := false
 
+	prepped := utils.PrepReflect(arg)
+
 	for {
 		r, width := utf8.DecodeRuneInString(sql[pos:])
 
 		if r == utf8.RuneError {
-			err := appendPart(buf, sql[start:pos], onParameter, arg)
+			err := appendPart(buf, sql[start:pos], onParameter, prepped)
 			if err != nil {
 				return "", err
 			}
 
 			break
 		} else if r == ':' {
-			err := appendPart(buf, sql[start:pos], onParameter, arg)
+			err := appendPart(buf, sql[start:pos], onParameter, prepped)
 			if err != nil {
 				return "", err
 			}
@@ -55,7 +57,7 @@ func Compile(sql string, arg interface{}) (string, error) {
 			start = pos + width
 		} else if r >= 'z' || r <= '1' {
 			if onParameter {
-				err := appendPart(buf, sql[start:pos], onParameter, arg)
+				err := appendPart(buf, sql[start:pos], onParameter, prepped)
 				if err != nil {
 					return "", err
 				}

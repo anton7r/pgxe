@@ -1,8 +1,9 @@
 package utils_test
 
 import (
-	"github.com/anton7r/pgxe/utils"
 	"testing"
+
+	"github.com/anton7r/pgxe/utils"
 )
 
 type testStruct struct {
@@ -30,7 +31,9 @@ type testStruct2 struct {
 
 func TestMissingField(t *testing.T) {
 
-	_, err := utils.GetNamedField(&testStruct{Field2: 123}, "Field22")
+	prepped := utils.PrepReflect(&testStruct{Field2: 123})
+
+	_, err := utils.GetNamedField(prepped, "Field22")
 
 	if err != nil {
 		if err.Error() != "field 'Field22' not found" {
@@ -40,7 +43,9 @@ func TestMissingField(t *testing.T) {
 }
 
 func TestIntConversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field2: 123}, "Field2")
+	prepped := utils.PrepReflect(&testStruct{Field2: 123})
+
+	ret, err := utils.GetNamedField(prepped, "Field2")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -53,7 +58,9 @@ func TestIntConversion(t *testing.T) {
 }
 
 func TestInt8Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field4: 123}, "Field4")
+	prep := utils.PrepReflect(&testStruct{Field4: 123})
+
+	ret, err := utils.GetNamedField(prep, "Field4")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -66,7 +73,9 @@ func TestInt8Conversion(t *testing.T) {
 }
 
 func TestInt16Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field5: 123}, "Field5")
+	pr := utils.PrepReflect(&testStruct{Field5: 123})
+	
+	ret, err := utils.GetNamedField(pr, "Field5")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -79,7 +88,9 @@ func TestInt16Conversion(t *testing.T) {
 }
 
 func TestInt32Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field6: 123}, "Field6")
+	pr := utils.PrepReflect(&testStruct{Field6: 123})
+
+	ret, err := utils.GetNamedField(pr, "Field6")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -92,7 +103,9 @@ func TestInt32Conversion(t *testing.T) {
 }
 
 func TestInt64Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field7: 123}, "Field7")
+	pr := utils.PrepReflect(&testStruct{Field7: 123})
+
+	ret, err := utils.GetNamedField(pr, "Field7")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -105,7 +118,9 @@ func TestInt64Conversion(t *testing.T) {
 }
 
 func TestUintntConversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field12: 123}, "Field12")
+	pr := utils.PrepReflect(&testStruct{Field12: 123})
+
+	ret, err := utils.GetNamedField(pr, "Field12")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -118,7 +133,9 @@ func TestUintntConversion(t *testing.T) {
 }
 
 func TestUint8Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field14: 123}, "Field14")
+	pr := utils.PrepReflect(&testStruct{Field14: 123})
+
+	ret, err := utils.GetNamedField(pr, "Field14")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -131,7 +148,9 @@ func TestUint8Conversion(t *testing.T) {
 }
 
 func TestUint16Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field15: 123}, "Field15")
+	pr := utils.PrepReflect(&testStruct{Field15: 123})
+
+	ret, err := utils.GetNamedField(pr, "Field15")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -144,7 +163,9 @@ func TestUint16Conversion(t *testing.T) {
 }
 
 func TestUint32Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field16: 123}, "Field16")
+	pr := utils.PrepReflect(&testStruct{Field16: 123})
+
+	ret, err := utils.GetNamedField(pr, "Field16")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -157,7 +178,9 @@ func TestUint32Conversion(t *testing.T) {
 }
 
 func TestUint64Conversion(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field17: 123}, "Field17")
+	pr := utils.PrepReflect(&testStruct{Field17: 123})
+
+	ret, err := utils.GetNamedField(pr, "Field17")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -170,7 +193,9 @@ func TestUint64Conversion(t *testing.T) {
 }
 
 func TestStringField(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field: "123"}, "Field")
+	pr := utils.PrepReflect(&testStruct{Field: "123"})
+
+	ret, err := utils.GetNamedField(pr, "Field")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -183,7 +208,9 @@ func TestStringField(t *testing.T) {
 }
 
 func TestBoolFalseField(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field3: false}, "Field3")
+	pr := utils.PrepReflect(&testStruct{Field3: false})
+
+	ret, err := utils.GetNamedField(pr, "Field3")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -196,7 +223,9 @@ func TestBoolFalseField(t *testing.T) {
 }
 
 func TestBoolTrueField(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field3: true}, "Field3")
+	pr := utils.PrepReflect(&testStruct{Field3: true})
+
+	ret, err := utils.GetNamedField(pr, "Field3")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -209,7 +238,9 @@ func TestBoolTrueField(t *testing.T) {
 }
 
 func TestFloat32(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field8: 1.98}, "Field8")
+	pr := utils.PrepReflect(&testStruct{Field8: 1.98})
+
+	ret, err := utils.GetNamedField(pr, "Field8")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -222,7 +253,9 @@ func TestFloat32(t *testing.T) {
 }
 
 func TestFloat64(t *testing.T) {
-	ret, err := utils.GetNamedField(&testStruct{Field9: 1.98}, "Field9")
+	prep := utils.PrepReflect(&testStruct{Field9: 1.98})
+
+	ret, err := utils.GetNamedField(prep, "Field9")
 
 	if err != nil {
 		t.Error("Function errored:" + err.Error())
@@ -237,7 +270,9 @@ func TestFloat64(t *testing.T) {
 func TestUnsupportedType(t *testing.T) {
 	c := 103
 
-	_, err := utils.GetNamedField(&testStruct{FieldUnsupported: &c}, "FieldUnsupported")
+	prep := utils.PrepReflect(&testStruct{FieldUnsupported: &c})
+
+	_, err := utils.GetNamedField(prep, "FieldUnsupported")
 
 	if err == nil {
 		t.Error("pointer was not errored")
@@ -248,7 +283,9 @@ func TestUnsupportedType(t *testing.T) {
 func TestUnsupportedType2(t *testing.T) {
 	var c []int = []int{123, 123}
 
-	_, err := utils.GetNamedField(&testStruct{FieldUnsupported2: c}, "FieldUnsupported2")
+	prepped := utils.PrepReflect(&testStruct{FieldUnsupported2: c})
+
+	_, err := utils.GetNamedField(prepped, "FieldUnsupported2")
 
 	if err == nil {
 		t.Error("pointer was not errored")
@@ -256,8 +293,17 @@ func TestUnsupportedType2(t *testing.T) {
 	}
 }
 
+func TestWrongType(t *testing.T) {
+	str := "string"
+	prep := utils.PrepReflect(&str)
+	_, err := utils.GetNamedField(prep, "string")
+	if err == nil {
+		t.Error("Did not error with wrong type")
+	}
+}
+
 func BenchmarkGetNamedField(b *testing.B) {
-	ts := &testStruct{Field:"Field"}
+	ts := utils.PrepReflect(&testStruct{Field: "Field"})
 
 	for i := 0; i < b.N; i++ {
 		_, err := utils.GetNamedField(ts, "Field")
@@ -268,7 +314,7 @@ func BenchmarkGetNamedField(b *testing.B) {
 }
 
 func BenchmarkGetNamedField2(b *testing.B) {
-	ts := &testStruct2{Field:"Field"}
+	ts := utils.PrepReflect(&testStruct2{Field: "Field"})
 
 	for i := 0; i < b.N; i++ {
 		_, err := utils.GetNamedField(ts, "Field")
