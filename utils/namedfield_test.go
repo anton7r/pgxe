@@ -323,3 +323,24 @@ func BenchmarkGetNamedField2(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkGetNamedField3(b *testing.B) {
+	ts := utils.PrepReflect(&testStruct{Field: "Field"})
+
+	for i := 0; i < b.N; i++ {
+		_, err := utils.GetNamedField(ts, "Field")
+		if err != nil {
+			b.Error(err.Error())
+		}
+
+		_, err = utils.GetNamedField(ts, "Field2")
+		if err != nil {
+			b.Error(err.Error())
+		}
+
+		_, err = utils.GetNamedField(ts, "Field3")
+		if err != nil {
+			b.Error(err.Error())
+		}
+	}
+}
