@@ -1,8 +1,9 @@
 package lexer_test
 
 import (
-	"github.com/anton7r/pgxe/lexer"
 	"testing"
+
+	"github.com/anton7r/pgxe/internal/lexer"
 )
 
 type TestStruct struct {
@@ -11,7 +12,7 @@ type TestStruct struct {
 }
 
 func TestCompile(t *testing.T) {
-	str, err := lexer.Compile("SELECT * FROM users WHERE name = :name AND email = :email", &TestStruct{Name: "Foo", Email: "foo@barbar"})
+	str, err := lexer.Compile("SELECT * FROM users WHERE name = :Name AND email = :Email", &TestStruct{Name: "Foo", Email: "foo@barbar"})
 	if err != nil {
 		t.Error("Failed: ", err.Error())
 	}
@@ -27,5 +28,12 @@ func BenchmarkCompile(b *testing.B) {
 	ts := &TestStruct{Name: "Foo", Email: "foo@barbar"}
 	for i := 0; i < b.N; i++ {
 		lexer.Compile("SELECT * FROM users WHERE name = :name AND email = :email", ts)
+	}
+}
+
+func BenchmarkCompile_2(b *testing.B) {
+	ts := &TestStruct{Name: "Foo", Email: "foo@barbar"}
+	for i := 0; i < b.N; i++ {
+		lexer.Compile("SELECT * FROM users WHERE name = :name AND email = :email SORT BY name DESC", ts)
 	}
 }

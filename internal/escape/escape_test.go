@@ -3,7 +3,7 @@ package escape_test
 import (
 	"testing"
 
-	"github.com/anton7r/pgxe/escape"
+	"github.com/anton7r/pgxe/internal/escape"
 )
 
 func TestEscape(t *testing.T) {
