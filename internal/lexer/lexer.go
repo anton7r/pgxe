@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"unicode/utf8"
 
-	"github.com/anton7r/pgxe/utils"
+	"github.com/anton7r/pgxe/internal/utils"
 )
 
 func appendPart(b *bytes.Buffer, str string, isParameter bool, arg reflect.Value) error {
@@ -25,6 +25,8 @@ func appendPart(b *bytes.Buffer, str string, isParameter bool, arg reflect.Value
 
 	return nil
 }
+
+const delim = ':'
 
 //Compile is used for parsing and compiling sql queries
 func Compile(sql string, arg interface{}) (string, error) {
@@ -47,7 +49,7 @@ func Compile(sql string, arg interface{}) (string, error) {
 			}
 
 			break
-		} else if r == ':' {
+		} else if r == delim {
 			err := appendPart(buf, sql[start:pos], onParameter, prepped)
 			if err != nil {
 				return "", err

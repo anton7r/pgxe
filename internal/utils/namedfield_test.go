@@ -3,7 +3,7 @@ package utils_test
 import (
 	"testing"
 
-	"github.com/anton7r/pgxe/utils"
+	"github.com/anton7r/pgxe/internal/utils"
 )
 
 type testStruct struct {
@@ -74,7 +74,7 @@ func TestInt8Conversion(t *testing.T) {
 
 func TestInt16Conversion(t *testing.T) {
 	pr := utils.PrepReflect(&testStruct{Field5: 123})
-	
+
 	ret, err := utils.GetNamedField(pr, "Field5")
 
 	if err != nil {
@@ -313,7 +313,7 @@ func BenchmarkGetNamedField(b *testing.B) {
 	}
 }
 
-func BenchmarkGetNamedField2(b *testing.B) {
+func BenchmarkGetNamedField_2(b *testing.B) {
 	ts := utils.PrepReflect(&testStruct2{Field: "Field"})
 
 	for i := 0; i < b.N; i++ {
@@ -324,7 +324,7 @@ func BenchmarkGetNamedField2(b *testing.B) {
 	}
 }
 
-func BenchmarkGetNamedField3(b *testing.B) {
+func BenchmarkGetNamedField_3(b *testing.B) {
 	ts := utils.PrepReflect(&testStruct{Field: "Field"})
 
 	for i := 0; i < b.N; i++ {
@@ -341,6 +341,99 @@ func BenchmarkGetNamedField3(b *testing.B) {
 		_, err = utils.GetNamedField(ts, "Field3")
 		if err != nil {
 			b.Error(err.Error())
+		}
+	}
+}
+
+func BenchmarkGetNamedField_4(b *testing.B) {
+	ts := utils.PrepReflect(&testStruct{Field: "Field"})
+
+	for i := 0; i < b.N; i++ {
+		for x := 0; x < 5; x++ {
+			_, err := utils.GetNamedField(ts, "Field")
+			if err != nil {
+				b.Error(err.Error())
+			}
+
+			_, err = utils.GetNamedField(ts, "Field2")
+			if err != nil {
+				b.Error(err.Error())
+			}
+
+			_, err = utils.GetNamedField(ts, "Field3")
+			if err != nil {
+				b.Error(err.Error())
+			}
+		}
+	}
+}
+
+func BenchmarkGetNamedFieldV2(b *testing.B) {
+	ts := utils.PrepReflect(&testStruct{Field: "Field"})
+	fields := utils.GetFields(ts)
+
+	for i := 0; i < b.N; i++ {
+		_, err := utils.GetNamedFieldV2(ts, fields, "Field")
+		if err != nil {
+			b.Error(err.Error())
+		}
+	}
+}
+
+func BenchmarkGetNamedFieldV2_2(b *testing.B) {
+	ts := utils.PrepReflect(&testStruct2{Field: "Field"})
+	fields := utils.GetFields(ts)
+
+	for i := 0; i < b.N; i++ {
+		_, err := utils.GetNamedFieldV2(ts, fields, "Field")
+		if err != nil {
+			b.Error(err.Error())
+		}
+	}
+}
+
+func BenchmarkGetNamedFieldV2_3(b *testing.B) {
+	ts := utils.PrepReflect(&testStruct{Field: "Field", Field2: 40, Field3: false})
+	fields := utils.GetFields(ts)
+
+	for i := 0; i < b.N; i++ {
+		_, err := utils.GetNamedFieldV2(ts, fields, "Field")
+		if err != nil {
+			b.Error(err.Error())
+		}
+
+		_, err = utils.GetNamedFieldV2(ts, fields, "Field2")
+		if err != nil {
+			b.Error(err.Error())
+		}
+
+		_, err = utils.GetNamedFieldV2(ts, fields, "Field3")
+		if err != nil {
+			b.Error(err.Error())
+		}
+	}
+}
+
+func BenchmarkGetNamedFieldV2_4(b *testing.B) {
+	ts := utils.PrepReflect(&testStruct{Field: "Field", Field2: 40, Field3: false})
+	fields := utils.GetFields(ts)
+
+	for i := 0; i < b.N; i++ {
+		for y := 0; y < 5; y++ {
+			_, err := utils.GetNamedFieldV2(ts, fields, "Field")
+			if err != nil {
+				b.Error(err.Error())
+			}
+
+			_, err = utils.GetNamedFieldV2(ts, fields, "Field2")
+			if err != nil {
+				b.Error(err.Error())
+			}
+
+			_, err = utils.GetNamedFieldV2(ts, fields, "Field3")
+			if err != nil {
+				b.Error(err.Error())
+			}
 		}
 	}
 }
