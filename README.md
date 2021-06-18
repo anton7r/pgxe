@@ -20,7 +20,7 @@ It also uses a modified fork of scany (`github.com/anton7r/pgx-scany` which remo
 
 ## Code example
 
-The code example is not guranteed to have correct syntax, so if you spot a mistake please file an issue :)
+The code example is not guranteed to have correct go-syntax, so if you spot a mistake please file an issue :)
 
 ```go
 import "github.com/anton7r/pgxe"
@@ -39,7 +39,9 @@ func main() {
         DbPort:   "5432",
     })
 
-    query := "SELECT * FROM products WHERE id = :id"
+    //The id placeholder in the query has to be same case as defined in the struct so that the field can be found
+    //Case insensitivity would decrease the performance of our lexer by at the worst case ~5x, so it is better for it to be case sensitive
+    query := "SELECT * FROM products WHERE id = :Id"
     rows, err := db.NamedQuery(query, &Product{Id:4})
     if err != nil {
         println(err.Error())
