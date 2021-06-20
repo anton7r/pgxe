@@ -29,7 +29,7 @@ func (p *PreparedQuery) str(args ...interface{}) (string, error) {
 }
 
 func (p *PreparedQuery) Select(db DB, target *interface{}, args ...interface{}) error {
-	str, err := p.str(args)
+	str, err := p.str(args...)
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func (p *PreparedQuery) Select(db DB, target *interface{}, args ...interface{}) 
 }
 
 func (p *PreparedQuery) Get(db DB, target *interface{}, args ...interface{}) error {
-	str, err := p.str(args)
+	str, err := p.str(args...)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (p *PreparedQuery) Get(db DB, target *interface{}, args ...interface{}) err
 }
 
 func (p *PreparedQuery) Query(db DB, args ...interface{}) (pgx.Rows, error) {
-	str, err := p.str(args)
+	str, err := p.str(args...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (p *PreparedQuery) Query(db DB, args ...interface{}) (pgx.Rows, error) {
 }
 
 func (p *PreparedQuery) QueryRow(db DB, args ...interface{}) (pgx.Row, error) {
-	str, err := p.str(args)
+	str, err := p.str(args...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (p *PreparedQuery) QueryRow(db DB, args ...interface{}) (pgx.Row, error) {
 }
 
 func (p *PreparedQuery) Exec(db DB, args ...interface{}) (pgconn.CommandTag, error) {
-	str, err := p.str(args)
+	str, err := p.str(args...)
 	if err != nil {
 		return nil, err
 	}
