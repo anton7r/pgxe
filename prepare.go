@@ -50,7 +50,7 @@ func (p *PreparedQuery) Exec(db DB, args ...interface{}) (pgconn.CommandTag, err
 }
 
 type PreparedNamedQuery struct {
-	parts []lexer.PartNamed
+	parts *[]lexer.PartNamed
 }
 
 //Prepares a named SQL-query with :FieldName placeholders
@@ -63,7 +63,7 @@ func PrepareNamed(sql string) (*PreparedNamedQuery, error) {
 	}
 
 	return &PreparedNamedQuery{
-		*parts,
+		parts,
 	}, nil
 }
 
