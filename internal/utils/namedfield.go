@@ -29,7 +29,7 @@ func GetNamedField(e reflect.Value, name string) (string, error) {
 		value := e.FieldByName(name)
 
 		if value.IsValid() {
-			return convertValueString(value.Interface())
+			return ConvertValueString(value.Interface())
 		}
 
 		return "", errors.New("field '" + name + "' not found")
@@ -39,7 +39,7 @@ func GetNamedField(e reflect.Value, name string) (string, error) {
 	}
 }
 
-func convertValueString(ifc interface{}) (string, error) {
+func ConvertValueString(ifc interface{}) (string, error) {
 	switch t := ifc.(type) {
 	case string:
 		return escape.QuoteString(ifc.(string)), nil
