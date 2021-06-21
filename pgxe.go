@@ -17,7 +17,6 @@ import (
 //DB stores the internal PgxPool
 type DB struct {
 	Pool  *pgxpool.Pool
-	delim string
 }
 
 type Connection struct {
@@ -27,27 +26,15 @@ type Connection struct {
 	DbPort   string
 }
 
-type ExtraConfig struct {
-	Delim string // this defaults to
-}
-
 type Rows struct {
 }
 
 type Row struct {
 }
 
-func getDelimOrDefault(e ExtraConfig) string {
-	if e.Delim != "" {
-		return e.Delim
-	} else {
-		return ":"
-	}
-}
-
 //Connect connects to the database
 //NOTE: It does not support all the features that are on connection string yet Use is currently recommended to be used instead
-func Connect(conn Connection, eConf ...ExtraConfig) (*DB, error) {
+func Connect(conn Connection) (*DB, error) {
 	var connStr string = "user=" + conn.User +
 		" password=" + conn.Password +
 		" dbname=" + conn.DbName +
@@ -59,17 +46,13 @@ func Connect(conn Connection, eConf ...ExtraConfig) (*DB, error) {
 		return nil, err
 	}
 
-	ec := eConf[0]
-
-	return &DB{delim: getDelimOrDefault(ec), Pool: db}, nil
+	return &DB{Pool: db}, nil
 }
 
 //Use uses an already existing connection
 //It assumes that the fed connection pool is not null
-func Use(conn *pgxpool.Pool, eConf ...ExtraConfig) *DB {
-	ec := eConf[0]
-
-	return &DB{delim: getDelimOrDefault(ec), Pool: conn}
+func Use(conn *pgxpool.Pool) *DB {
+	return &DB{Pool: conn}
 }
 
 //Select is a high-level function that is used to retrieve data from database into structs

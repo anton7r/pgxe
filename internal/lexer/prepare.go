@@ -35,7 +35,7 @@ func PrepareNamed(sql string) (*[]PartNamed, error) {
 
 			onParameter = true
 			start = pos + width
-		} else if r >= 'z' || r <= '1' {
+		} else if r > 'z' || r < '1' {
 			if onParameter {
 				sl = append(sl, PartNamed{sql[start:pos], onParameter})
 
@@ -71,7 +71,7 @@ func Prepare(sql string) (*[]Part, error) {
 
 			onParameter = true
 			start = pos + width
-		} else if r >= 'z' || r <= '1' {
+		} else if r > 'z' || r < '1' {
 			if onParameter {
 				sl = append(sl, Part{sql[start:pos], onParameter})
 

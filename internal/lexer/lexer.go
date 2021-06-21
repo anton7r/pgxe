@@ -57,7 +57,7 @@ func Compile(sql string, arg interface{}) (string, error) {
 
 			onParameter = true
 			start = pos + width
-		} else if r >= 'z' || r <= '1' {
+		} else if r > 'z' || r < '1' {
 			if onParameter {
 				err := appendPart(buf, sql[start:pos], onParameter, prepped)
 				if err != nil {

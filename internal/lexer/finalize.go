@@ -8,7 +8,7 @@ import (
 )
 
 //FinalizeNamed is a function that finalizes the named sql queries before they are executed
-func FinalizeNamed(parts *[]PartNamed, arg *interface{}) (string, error) {
+func FinalizeNamed(parts *[]PartNamed, arg interface{}) (string, error) {
 	buf := &bytes.Buffer{}
 	prepped := utils.PrepReflect(arg)
 
@@ -41,12 +41,12 @@ func Finalize(parts *[]Part, args ...interface{}) (string, error) {
 
 	for _, part := range *parts {
 		if part.OnParam {
-			i, err := strconv.ParseInt(part.Str, 10, 8)
+			i, err := strconv.ParseInt(part.Str, 10, 0)
 			if err != nil {
 				return "", err
 			}
 
-			str, err2 := utils.ConvertValueString(args[i])
+			str, err2 := utils.ConvertValueString(args[i-1])
 			if err2 != nil {
 				return "", err2
 			}
