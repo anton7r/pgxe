@@ -24,6 +24,13 @@ func TestCompile(t *testing.T) {
 	}
 }
 
+func TestCompileWrong(t *testing.T) {
+	_, err := lexer.Compile("SELECT * FROM users WHERE name = :Namd AND email = :EmaiI", &TestStruct{Name: "Foo", Email: "foo@barbar"})
+	if err == nil {
+		t.Error("Did not error")
+	}
+}
+
 func BenchmarkCompile(b *testing.B) {
 	ts := &TestStruct{Name: "Foo", Email: "foo@barbar"}
 	for i := 0; i < b.N; i++ {
