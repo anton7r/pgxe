@@ -30,6 +30,20 @@ func TestNamedComplete(t *testing.T) {
 	}
 }
 
+func TestNamedIncorrectFieldName(t *testing.T) {
+	x, err := lexer.PrepareNamed("SELECT * FROM users WHERE name = :Namd")
+	if err != nil {
+		t.Error("Error while testing:" + err.Error())
+	}
+
+	d := &testingStruct{Name: "TEST"}
+
+	_, err2 := lexer.FinalizeNamed(x, d)
+	if err2 == nil {
+		t.Error("Did not error!")
+	}
+}
+
 func TestComplete(t *testing.T) {
 	x, err := lexer.Prepare("SELECT * FROM users WHERE name = $1")
 	if err != nil {
@@ -45,6 +59,18 @@ func TestComplete(t *testing.T) {
 
 	if sql != exp {
 		t.Error("Expected: " + exp + "\nBut instead got:" + sql)
+	}
+}
+
+func TestIncorrectIndex(t *testing.T) {
+	x, err := lexer.Prepare("SELECT * FROM users WHERE name = $2")
+	if err != nil {
+		t.Error("Error while testing:" + err.Error())
+	}
+
+	_, err2 := lexer.Finalize(x, "TEST")
+	if err2 == nil {
+		t.Errorf("Did not error!")
 	}
 }
 
