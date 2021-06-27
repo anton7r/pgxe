@@ -23,9 +23,6 @@ func GetNamedField(e reflect.Value, name string) (string, error) {
 	//but as we optimize it more the difference starts to make somewhat of a meaningful impact
 	switch kind {
 	case reflect.Struct:
-		//value := e.FieldByNameFunc(func(fieldName string) bool {
-		//	return strings.EqualFold(fieldName, name)
-		//})
 		value := e.FieldByName(name)
 
 		if value.IsValid() {
