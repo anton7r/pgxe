@@ -56,12 +56,12 @@ func Use(conn *pgxpool.Pool) *DB {
 }
 
 //Select is a high-level function that is used to retrieve data from database into structs
-func (DB *DB) Select(target *interface{}, query string, args ...interface{}) error {
+func (DB *DB) Select(target interface{}, query string, args ...interface{}) error {
 	return pgxscan.Select(context.Background(), DB.Pool, target, query, args...)
 }
 
 //Select is a high-level function that is used to retrieve data from database into structs
-func (DB *DB) Get(target *interface{}, query string, args ...interface{}) error {
+func (DB *DB) Get(target interface{}, query string, args ...interface{}) error {
 	return pgxscan.Get(context.Background(), DB.Pool, target, query, args...)
 }
 
@@ -81,7 +81,7 @@ func (DB *DB) Exec(query string, args ...interface{}) (pgconn.CommandTag, error)
 }
 
 //NamedSelect is a high-level function that is used to retrieve data from database into structs
-func (DB *DB) NamedSelect(target *interface{}, query string, arg *interface{}) error {
+func (DB *DB) NamedSelect(target interface{}, query string, arg interface{}) error {
 	query, err := lexer.Compile(query, arg)
 	if err != nil {
 		return err
@@ -91,7 +91,7 @@ func (DB *DB) NamedSelect(target *interface{}, query string, arg *interface{}) e
 }
 
 //NamedGet is a high-level function that is used to retrieve data from database into structs
-func (DB *DB) NamedGet(target *interface{}, query string, arg *interface{}) error {
+func (DB *DB) NamedGet(target interface{}, query string, arg interface{}) error {
 	query, err := lexer.Compile(query, arg)
 	if err != nil {
 		return err
@@ -101,7 +101,7 @@ func (DB *DB) NamedGet(target *interface{}, query string, arg *interface{}) erro
 }
 
 //NamedQuery simplifies the parameters and allows the use of named parameters
-func (DB *DB) NamedQuery(query string, arg *interface{}) (pgx.Rows, error) {
+func (DB *DB) NamedQuery(query string, arg interface{}) (pgx.Rows, error) {
 	query, err := lexer.Compile(query, arg)
 	if err != nil {
 		return nil, err
@@ -111,7 +111,7 @@ func (DB *DB) NamedQuery(query string, arg *interface{}) (pgx.Rows, error) {
 }
 
 //NamedQueryRow simplifies the parameters and allows the use of named parameters
-func (DB *DB) NamedQueryRow(query string, arg *interface{}) (pgx.Row, error) {
+func (DB *DB) NamedQueryRow(query string, arg interface{}) (pgx.Row, error) {
 	query, err := lexer.Compile(query, arg)
 	if err != nil {
 		return nil, err
@@ -121,7 +121,7 @@ func (DB *DB) NamedQueryRow(query string, arg *interface{}) (pgx.Row, error) {
 }
 
 //NamedExec simplifies the parameters and allows the use of named parameters
-func (DB *DB) NamedExec(query string, arg *interface{}) (pgconn.CommandTag, error) {
+func (DB *DB) NamedExec(query string, arg interface{}) (pgconn.CommandTag, error) {
 	query, err := lexer.Compile(query, arg)
 	if err != nil {
 		return nil, err

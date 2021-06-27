@@ -53,9 +53,17 @@ func TestConnect(t *testing.T) {
 	db.Close()
 }
 
+type Employee struct {
+	Name string
+	Surname string
+	PaymentAddress string
+}
+
 //TODO
 func TestSelect(t *testing.T) {
+	emp := &Employee{}
 
+	db.Select(emp, "SELECT * FROM employees LIMIT 1")
 }
 
 //TODO
