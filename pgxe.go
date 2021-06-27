@@ -55,12 +55,12 @@ func Use(conn *pgxpool.Pool) *DB {
 	return &DB{Pool: conn}
 }
 
-//Select is a high-level function that is used to retrieve data from database into structs
+//Select is a high-level function that is used to retrieve data from database into slices which has structs
 func (DB *DB) Select(target interface{}, query string, args ...interface{}) error {
 	return pgxscan.Select(context.Background(), DB.Pool, target, query, args...)
 }
 
-//Select is a high-level function that is used to retrieve data from database into structs
+//Get is a high-level function that is used to retrieve data from database into a single struct
 func (DB *DB) Get(target interface{}, query string, args ...interface{}) error {
 	return pgxscan.Get(context.Background(), DB.Pool, target, query, args...)
 }

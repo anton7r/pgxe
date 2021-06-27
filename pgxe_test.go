@@ -54,21 +54,42 @@ func TestConnect(t *testing.T) {
 }
 
 type Employee struct {
-	Name string
-	Surname string
-	PaymentAddress string
+	ID             int
+	Name           string
+	Surname        string
+	PaymentAddress string `db:"paymentAddress"`
 }
 
 //TODO
 func TestSelect(t *testing.T) {
-	emp := &Employee{}
 
-	db.Select(emp, "SELECT * FROM employees LIMIT 1")
 }
 
-//TODO
 func TestGet(t *testing.T) {
+	emp := &Employee{}
 
+	err := db.Get(emp, "SELECT * FROM employees LIMIT 1")
+
+	if err != nil {
+		t.Error("Test errored:" + err.Error())
+		t.FailNow()
+	}
+
+	if emp.Name != "ABC" {
+		t.Error("Name wasnt as expected and got: " + emp.Name)
+	}
+
+	if emp.Surname != "123" {
+		t.Error("Surname wasnt as expected and got: " + emp.Surname)
+	}
+
+	if emp.PaymentAddress != "FooBar" {
+		t.Error("PaymentAddress wasnt as expected and got: " + emp.PaymentAddress)
+	}
+
+	if emp.ID != 1 {
+		t.Errorf("ID wasnt as expected and got: %o", emp.ID)
+	}
 }
 
 //TODO
