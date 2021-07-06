@@ -3,6 +3,7 @@ package pgxe_test
 import (
 	"context"
 	"log"
+	"strconv"
 	"testing"
 
 	"github.com/anton7r/pgxe"
@@ -60,9 +61,19 @@ type Employee struct {
 	PaymentAddress string `db:"paymentAddress"`
 }
 
-//TODO
 func TestSelect(t *testing.T) {
+	emps := &[]Employee{}
 
+	err := db.Select(emps, "SELECT * FROM employees LIMIT 2")
+
+	if err != nil {
+		t.Error("Test errored:" + err.Error())
+		t.FailNow()
+	}
+
+	if len(*emps) != 2 {
+		t.Error("Test failed expected to return 2 rows but got " + strconv.Itoa(len(*emps)))
+	}
 }
 
 func TestGet(t *testing.T) {
@@ -97,9 +108,32 @@ func TestQuery(t *testing.T) {
 
 }
 
-//TODO
 func TestQueryRow(t *testing.T) {
+	emp := &Employee{}
 
+	err := db.QueryRow("SELECT * FROM employees LIMIT 1").
+		Scan(emp)
+
+	if err != nil {
+		t.Error("Test errored:" + err.Error())
+		t.FailNow()
+	}
+
+	if emp.Name != "ABC" {
+		t.Error("Name wasnt as expected and got: " + emp.Name)
+	}
+
+	if emp.Surname != "123" {
+		t.Error("Surname wasnt as expected and got: " + emp.Surname)
+	}
+
+	if emp.PaymentAddress != "FooBar" {
+		t.Error("PaymentAddress wasnt as expected and got: " + emp.PaymentAddress)
+	}
+
+	if emp.ID != 1 {
+		t.Errorf("ID wasnt as expected and got: %o", emp.ID)
+	}
 }
 
 //TODO
