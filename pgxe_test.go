@@ -27,7 +27,7 @@ func init() {
 }
 
 func TestUse(t *testing.T) {
-	pool, err := pgxpool.Connect(context.TODO(), "user="+"test"+" password="+"test"+" dbname="+"test"+" port="+"5432"+" sslmode=disable")
+	pool, err := pgxpool.Connect(context.TODO(), "user=test password=test dbname=test port=5432 sslmode=disable")
 	if err != nil {
 		t.Error("Error happened: " + err.Error())
 	}
@@ -136,9 +136,15 @@ func TestQueryRow(t *testing.T) {
 	}
 }
 
-//TODO
 func TestExec(t *testing.T) {
+	c, err := db.Exec("INSERT INTO employees (name, surname, \"paymentAddress\") VALUES ($1, $1, $1)", "Hi")
 
+	if err != nil {
+		t.Error("Insertion to the database failed: " + err.Error())
+		t.FailNow()
+	}
+
+	t.Log("got command tag: " + c.String())
 }
 
 //TODO
@@ -166,7 +172,6 @@ func TestNamedExec(t *testing.T) {
 
 }
 
-//TODO
 func TestClose(t *testing.T) {
 	db.Close()
 }

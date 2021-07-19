@@ -16,6 +16,7 @@ type PartNamed struct {
 
 //PrepareNamed is used for parsing and preparing sql queries
 func PrepareNamed(sql string) (*[]PartNamed, error) {
+	sql = Format(sql)
 
 	sl := []PartNamed{} //slice
 
@@ -52,6 +53,7 @@ func PrepareNamed(sql string) (*[]PartNamed, error) {
 
 //Prepare is used for parsing and preparing sql queries
 func Prepare(sql string) (*[]Part, error) {
+	sql = Format(sql)
 
 	sl := []Part{} // slice
 
