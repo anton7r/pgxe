@@ -52,7 +52,7 @@ func PrepareNamed(sql string) (*[]PartNamed, error) {
 }
 
 //Prepare is used for parsing and preparing sql queries
-func Prepare(sql string) (*[]Part, error) {
+func Prepare(sql string) *[]Part {
 	sql = Format(sql)
 
 	sl := []Part{} // slice
@@ -85,5 +85,5 @@ func Prepare(sql string) (*[]Part, error) {
 		pos += width
 	}
 
-	return &sl, nil
+	return &sl
 }

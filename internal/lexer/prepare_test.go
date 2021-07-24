@@ -65,10 +65,7 @@ func TestNamedIncorrectFieldName(t *testing.T) {
 }
 
 func TestComplete(t *testing.T) {
-	x, err := lexer.Prepare("SELECT * FROM users WHERE name = $1")
-	if err != nil {
-		t.Error("Error while testing:" + err.Error())
-	}
+	x := lexer.Prepare("SELECT * FROM users WHERE name = $1")
 
 	sql, err2 := lexer.Finalize(x, "TEST")
 	if err2 != nil {
@@ -83,10 +80,7 @@ func TestComplete(t *testing.T) {
 }
 
 func TestComplete2(t *testing.T) {
-	x, err := lexer.Prepare("SELECT * FROM users WHERE name = $1 ORDER BY ID DESC")
-	if err != nil {
-		t.Error("Error while testing:" + err.Error())
-	}
+	x := lexer.Prepare("SELECT * FROM users WHERE name = $1 ORDER BY ID DESC")
 
 	sql, err2 := lexer.Finalize(x, "TEST")
 	if err2 != nil {
@@ -101,25 +95,19 @@ func TestComplete2(t *testing.T) {
 }
 
 func TestIncorrectIndex(t *testing.T) {
-	x, err := lexer.Prepare("SELECT * FROM users WHERE name = $2")
-	if err != nil {
-		t.Error("Error while testing:" + err.Error())
-	}
+	x := lexer.Prepare("SELECT * FROM users WHERE name = $2")
 
-	_, err2 := lexer.Finalize(x, "TEST")
-	if err2 == nil {
+	_, err := lexer.Finalize(x, "TEST")
+	if err == nil {
 		t.Errorf("Did not error!")
 	}
 }
 
 func TestIncorrectIndex2(t *testing.T) {
-	x, err := lexer.Prepare("SELECT * FROM users WHERE name = $g")
-	if err != nil {
-		t.Error("Error while testing:" + err.Error())
-	}
+	x := lexer.Prepare("SELECT * FROM users WHERE name = $g")
 
-	_, err2 := lexer.Finalize(x, "TEST")
-	if err2 == nil {
+	_, err := lexer.Finalize(x, "TEST")
+	if err == nil {
 		t.Errorf("Did not error!")
 	}
 }

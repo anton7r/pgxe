@@ -12,23 +12,17 @@ type PreparedQuery struct {
 
 //Prepares a traditional SQL-query with $1, $2, $3 placeholders
 //NOTE: This does not use the pgx way to prepare queries under the hood
-func Prepare(sql string) (*PreparedQuery, error) {
-	parts, err := lexer.Prepare(sql)
-
-	if err != nil {
-		return nil, err
-	}
-
+func Prepare(sql string) *PreparedQuery {
 	return &PreparedQuery{
-		parts,
-	}, nil
+		lexer.Prepare(sql),
+	}
 }
 
 func (p *PreparedQuery) str(args ...interface{}) (string, error) {
 	return lexer.Finalize(p.parts, args...)
 }
 
-func (p *PreparedQuery) Select(db DB, target interface{}, args ...interface{}) error {
+func (p *PreparedQuery) Select(db *DB, target interface{}, args ...interface{}) error {
 	str, err := p.str(args...)
 	if err != nil {
 		return err
@@ -37,7 +31,7 @@ func (p *PreparedQuery) Select(db DB, target interface{}, args ...interface{}) e
 	return db.Select(target, str)
 }
 
-func (p *PreparedQuery) Get(db DB, target interface{}, args ...interface{}) error {
+func (p *PreparedQuery) Get(db *DB, target interface{}, args ...interface{}) error {
 	str, err := p.str(args...)
 	if err != nil {
 		return err
@@ -46,7 +40,7 @@ func (p *PreparedQuery) Get(db DB, target interface{}, args ...interface{}) erro
 	return db.Get(target, str)
 }
 
-func (p *PreparedQuery) Query(db DB, args ...interface{}) (pgx.Rows, error) {
+func (p *PreparedQuery) Query(db *DB, args ...interface{}) (pgx.Rows, error) {
 	str, err := p.str(args...)
 	if err != nil {
 		return nil, err
@@ -55,7 +49,7 @@ func (p *PreparedQuery) Query(db DB, args ...interface{}) (pgx.Rows, error) {
 	return db.Query(str)
 }
 
-func (p *PreparedQuery) QueryRow(db DB, args ...interface{}) (pgx.Row, error) {
+func (p *PreparedQuery) QueryRow(db *DB, args ...interface{}) (pgx.Row, error) {
 	str, err := p.str(args...)
 	if err != nil {
 		return nil, err
@@ -64,7 +58,7 @@ func (p *PreparedQuery) QueryRow(db DB, args ...interface{}) (pgx.Row, error) {
 	return db.QueryRow(str), nil
 }
 
-func (p *PreparedQuery) Exec(db DB, args ...interface{}) (pgconn.CommandTag, error) {
+func (p *PreparedQuery) Exec(db *DB, args ...interface{}) (pgconn.CommandTag, error) {
 	str, err := p.str(args...)
 	if err != nil {
 		return nil, err
@@ -95,7 +89,7 @@ func (p *PreparedNamedQuery) str(arg interface{}) (string, error) {
 	return lexer.FinalizeNamed(p.parts, arg)
 }
 
-func (p *PreparedNamedQuery) Select(db DB, target interface{}, arg interface{}) error {
+func (p *PreparedNamedQuery) Select(db *DB, target interface{}, arg interface{}) error {
 	str, err := p.str(arg)
 	if err != nil {
 		return err
@@ -104,7 +98,7 @@ func (p *PreparedNamedQuery) Select(db DB, target interface{}, arg interface{}) 
 	return db.Select(target, str)
 }
 
-func (p *PreparedNamedQuery) Get(db DB, target interface{}, arg interface{}) error {
+func (p *PreparedNamedQuery) Get(db *DB, target interface{}, arg interface{}) error {
 	str, err := p.str(arg)
 	if err != nil {
 		return err
@@ -113,7 +107,7 @@ func (p *PreparedNamedQuery) Get(db DB, target interface{}, arg interface{}) err
 	return db.Get(target, str)
 }
 
-func (p *PreparedNamedQuery) Exec(db DB, arg interface{}) (pgconn.CommandTag, error) {
+func (p *PreparedNamedQuery) Exec(db *DB, arg interface{}) (pgconn.CommandTag, error) {
 	str, err := p.str(arg)
 	if err != nil {
 		return nil, err
@@ -122,7 +116,7 @@ func (p *PreparedNamedQuery) Exec(db DB, arg interface{}) (pgconn.CommandTag, er
 	return db.Exec(str)
 }
 
-func (p *PreparedNamedQuery) Query(db DB, arg interface{}) (pgx.Rows, error) {
+func (p *PreparedNamedQuery) Query(db *DB, arg interface{}) (pgx.Rows, error) {
 	str, err := p.str(arg)
 	if err != nil {
 		return nil, err
@@ -131,7 +125,7 @@ func (p *PreparedNamedQuery) Query(db DB, arg interface{}) (pgx.Rows, error) {
 	return db.Query(str)
 }
 
-func (p *PreparedNamedQuery) QueryRow(db DB, arg interface{}) (pgx.Row, error) {
+func (p *PreparedNamedQuery) QueryRow(db *DB, arg interface{}) (pgx.Row, error) {
 	str, err := p.str(arg)
 	if err != nil {
 		return nil, err

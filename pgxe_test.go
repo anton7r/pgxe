@@ -39,7 +39,7 @@ func TestUse(t *testing.T) {
 	}
 }
 
-func TestConnect(t *testing.T) {
+func TestConnectClose(t *testing.T) {
 	db, err := pgxe.Connect(pgxe.Connection{
 		User:     "test",
 		Password: "test",
@@ -300,8 +300,4 @@ func TestNamedExec(t *testing.T) {
 	}
 
 	t.Log("got command tag: " + c.String())
-}
-
-func TestClose(t *testing.T) {
-	db.Close()
 }
