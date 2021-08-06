@@ -81,6 +81,19 @@ func TestPrepareQuery(t *testing.T) {
 	}
 }
 
+func TestPrepareExec(t *testing.T) {
+	prep := pgxe.Prepare("INSERT INTO employees (name, surname, \"paymentAddress\") VALUES ($1, $1, $1)")
+
+	c, err := prep.Exec(db, "Hi")
+
+	if err != nil {
+		t.Error("Insertion to the database failed: " + err.Error())
+		t.FailNow()
+	}
+
+	t.Log("got command tag: " + c.String())
+}
+
 
 func TestPrepareQueryRow(t *testing.T) {
 	prep := pgxe.Prepare("SELECT * FROM employees WHERE ID = $1 LIMIT 1")
@@ -145,6 +158,23 @@ func TestPrepareNamedGet(t *testing.T) {
 	}
 }
 
+func TestPrepareNamedSelect(t *testing.T) {
+	prep, err := pgxe.PrepareNamed("SELECT * FROM employees WHERE ID <= :Id")
+	if err != nil {
+		t.Fatal("Errored during preparation: " + err.Error())
+	}
+
+	emps := []Employee{}
+
+	err2 := prep.Select(db, &emps, &tNamed{Id: 3})
+	if err2 != nil {
+		t.Fatal("Errored during query: " + err.Error())
+	}
+
+	if len(emps) != 3 {
+		t.Fatal("Expected length 3 but got " + string(rune(len(emps))))
+	}
+}
 func TestPrepareNamedQuery(t *testing.T) {
 	prep, err := pgxe.PrepareNamed("SELECT * FROM employees WHERE ID <= :Id")
 
@@ -218,4 +248,24 @@ func TestPrepareNamedQueryRow(t *testing.T) {
 	if emp.ID != 1 {
 		t.Errorf("ID wasnt as expected and got: %o", emp.ID)
 	}
+}
+
+type testingS struct {
+	Value string `json:"value,omitempty"`
+}
+
+func TestPrepareNamedExec(t *testing.T) {
+	prep, err := pgxe.PrepareNamed("INSERT INTO employees (name, surname, \"paymentAddress\") VALUES (:Value, :Value, :Value)")
+	if err != nil {
+		t.Fatal("Errored during preparation: " + err.Error())
+	}
+
+	c, err := prep.Exec(db, &testingS{"Hi"})
+
+	if err != nil {
+		t.Error("Insertion to the database failed: " + err.Error())
+		t.FailNow()
+	}
+
+	t.Log("got command tag: " + c.String())
 }
