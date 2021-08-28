@@ -19,36 +19,6 @@ type DB struct {
 	Pool *pgxpool.Pool
 }
 
-type Connection struct {
-	User     string
-	Password string
-	DbName   string
-	DbPort   string
-}
-
-//Connect connects to the database
-//NOTE: It does not support all the features that are on connection string yet Use is currently recommended to be used instead
-func Connect(conn Connection) (*DB, error) {
-	var connStr string = "user=" + conn.User +
-		" password=" + conn.Password +
-		" dbname=" + conn.DbName +
-		" port=" + conn.DbPort +
-		" sslmode=disable"
-
-	db, err := pgxpool.Connect(context.Background(), connStr)
-	if err != nil {
-		return nil, err
-	}
-
-	return &DB{Pool: db}, nil
-}
-
-//Use uses an already existing connection
-//It assumes that the fed connection pool is not null
-func Use(conn *pgxpool.Pool) *DB {
-	return &DB{Pool: conn}
-}
-
 //Select is a high-level function that is used to retrieve data from database into slices which has structs.
 func (DB *DB) Select(target interface{}, query string, args ...interface{}) error {
 	return pgxscan.Select(context.Background(), DB.Pool, target, query, args...)
