@@ -1,11 +1,12 @@
 # PGXE - PGX Extension
 
-[![gopherbadger coverage badge](https://godoc.org/github.com/anton7r/pgxe?status.svg)](https://pkg.go.dev/github.com/anton7r/pgxe)
+[![Refrence](https://godoc.org/github.com/anton7r/pgxe?status.svg)](https://pkg.go.dev/github.com/anton7r/pgxe)
 ![Coverage](./coverage_badge.png)
 
 This library aims to reduce the cognitive load while trying to make sql queries and hastens development.
 
-Query preparation is fast (for most queries 500ns - 800ns) because it cuts certain corners such as not handling comments at all, which may be problematic for you or not
+Query preparation is fast (for most queries 500ns - 800ns) because it cuts certain corners such as not handling comments at all, which may be problematic for you or not.
+It is recommended that in production you use just pgx because the overhead of this library might be sometimes a bit too much in systems that need to scale extremely well
 
 Extends from the jackc/pgx library.
 
