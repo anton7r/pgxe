@@ -39,7 +39,7 @@ func main() {
         User:     "admin",
         Password: "superSecretPassword",
         Database: "postgres",
-        Host:     "localhost"
+        Host:     "localhost",
         Port:     "5432",
 
         Logger:   logger //pgx.Logger
