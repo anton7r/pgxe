@@ -8,8 +8,6 @@ This library aims to reduce the cognitive load while trying to make sql queries 
 Query preparation is fast (for most queries 500ns - 800ns) because it cuts certain corners such as not handling comments at all, which may be problematic for you or not.
 It is recommended that in production you use just pgx because the overhead of this library might be sometimes a bit too much in systems that need to scale extremely well
 
-Extends from the jackc/pgx library.
-
 Utilizes the pgx library under the hood to achieve fast performance.
 
 It also uses a modified fork of scany (`github.com/anton7r/pgx-scany` which removes unneccessary imports) to scan database rows into structs.
@@ -40,8 +38,9 @@ func main() {
     db := pgxe.Connect(pgxe.Connection{
         User:     "admin",
         Password: "superSecretPassword",
-        DbName:   "postgres",
-        DbPort:   "5432",
+        Database: "postgres",
+        Host:     "localhost"
+        Port:     "5432",
 
         Logger:   logger //pgx.Logger
     })

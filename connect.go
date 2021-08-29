@@ -2,17 +2,26 @@ package pgxe
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type Connection struct {
-	User     string
+	User     string // pgx defaults this to your OS username
 	Password string
-	DbName   string
-	DbPort   string
-	SslMode  string // defaults to disable
+	Database string // the name of the database
+	Host     string // defaults to localhost
+	Port     string // defaults to 5432
+
+	SslMode string // defaults to disable
+
+	PoolMaxConns          int // default 4
+	PoolMinConns          int // default 0
+	PoolMaxConnLifetime   int // default time.Hour
+	PoolMaxConnIdleTime   int // default time.Minute * 30
+	PoolHealthCheckPeriod int // default time.Minute
 
 	Logger pgx.Logger
 }
@@ -24,18 +33,49 @@ func Connect(conn Connection) (*DB, error) {
 		conn.SslMode = "disable"
 	}
 
+	if conn.Port == "" {
+		conn.Port = "5432"
+	}
+
+	if conn.Host == "" {
+		conn.Host = "localhost"
+	}
+
 	var connStr string = "user=" + conn.User +
 		" password=" + conn.Password +
-		" dbname=" + conn.DbName +
-		" port=" + conn.DbPort +
+		" dbname=" + conn.Database +
+		" host=" + conn.Host +
+		" port=" + conn.Port +
 		" sslmode=" + conn.SslMode
 
-	config, err := pgxpool.ParseConfig(connStr)
+	if conn.PoolMaxConns != 0 {
+		connStr += " pool_max_conns=" + strconv.Itoa(conn.PoolMaxConns)
+	}
+
+	if conn.PoolMinConns != 0 {
+		connStr += " pool_min_conns=" + strconv.Itoa(conn.PoolMinConns)
+	}
+
+	if conn.PoolMaxConnLifetime != 0 {
+		connStr += " pool_max_conn_lifetime=" + strconv.Itoa(conn.PoolMaxConnLifetime)
+	}
+
+	if conn.PoolMaxConnIdleTime != 0 {
+		connStr += " pool_max_conn_idle_time=" + strconv.Itoa(conn.PoolMaxConnIdleTime)
+	}
+
+	if conn.PoolHealthCheckPeriod != 0 {
+		connStr += " pool_health_check_period=" + strconv.Itoa(conn.PoolHealthCheckPeriod)
+	}
+
+	config, err := pgxpool.ParseConfig(connStr) // we need to parse it because otherwise it could not use pgx default values and could be more prone to bugs
 	if err != nil {
 		return nil, err
 	}
 
-	config.ConnConfig.Logger = conn.Logger
+	if conn.Logger != nil {
+		config.ConnConfig.Logger = conn.Logger
+	}
 
 	db, err2 := pgxpool.ConnectConfig(context.Background(), config)
 	if err2 != nil {

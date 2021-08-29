@@ -12,15 +12,18 @@ import (
 
 var db *pgxe.DB
 
-func init() {
-	var err error
-	db, err = pgxe.Connect(pgxe.Connection{
+func conn() (*pgxe.DB, error) {
+	return pgxe.Connect(pgxe.Connection{
 		User:     "test",
 		Password: "test",
-		DbName:   "test",
-		DbPort:   "5432",
+		Database: "test",
+		Port:     "5432",
 	})
+}
 
+func init() {
+	var err error
+	db, err = conn()
 	if err != nil {
 		log.Panic("Tests errored in the initialization phase: " + err.Error())
 	}
@@ -40,13 +43,7 @@ func TestUse(t *testing.T) {
 }
 
 func TestConnectClose(t *testing.T) {
-	db, err := pgxe.Connect(pgxe.Connection{
-		User:     "test",
-		Password: "test",
-		DbName:   "test",
-		DbPort:   "5432",
-	})
-
+	db, err := conn()
 	if err != nil {
 		t.Error(err.Error())
 	}
